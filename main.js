@@ -1,4 +1,5 @@
 import { VibeKanbanWebCompanion } from 'vibe-kanban-web-companion';
+import { saveToLocalStorage, loadFromLocalStorage } from './localStorage-utils.js';
 
 // Todos array (Feature 1)
 let todos = [];
@@ -13,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function init() {
+    // Restore state from localStorage
+    const stored = loadFromLocalStorage();
+    todos = stored.todos;
+    nextId = stored.nextId;
+
     // Wire up add button
     const addBtn = document.getElementById('addBtn');
     const todoInput = document.getElementById('todoInput');
@@ -49,6 +55,7 @@ function addTodo() {
         completed: false
     });
 
+    saveToLocalStorage(todos, nextId);
     input.value = '';
     renderTodos();
 }
@@ -57,12 +64,14 @@ function toggleTodo(id) {
     const todo = todos.find(t => t.id === id);
     if (todo) {
         todo.completed = !todo.completed;
+        saveToLocalStorage(todos, nextId);
         renderTodos();
     }
 }
 
 function deleteTodo(id) {
     todos = todos.filter(t => t.id !== id);
+    saveToLocalStorage(todos, nextId);
     renderTodos();
 }
 
