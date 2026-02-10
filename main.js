@@ -1,5 +1,6 @@
 import { VibeKanbanWebCompanion } from 'vibe-kanban-web-companion';
 import { saveToLocalStorage, loadFromLocalStorage } from './localStorage-utils.js';
+import { format, compareAsc, formatDistanceToNow, isPast } from 'date-fns';
 
 // Todos array (Feature 1)
 let todos = [];
@@ -7,6 +8,9 @@ let nextId = 1;
 
 // Current filter (Feature 2)
 let currentFilter = 'all';
+
+// Sort mode (Feature 3)
+let sortByDueDate = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
@@ -34,6 +38,10 @@ function init() {
         btn.addEventListener('click', () => setFilter(btn.dataset.filter));
     });
 
+    // Wire up sort button
+    const sortBtn = document.getElementById('sortByDueDate');
+    sortBtn.addEventListener('click', toggleSortByDueDate);
+
     renderTodos();
 }
 
@@ -45,18 +53,26 @@ function initVibeKanban() {
 // Feature 1: Add, toggle, delete todos
 function addTodo() {
     const input = document.getElementById('todoInput');
+    const dueDateInput = document.getElementById('dueDateInput');
     const text = input.value.trim();
 
     if (text === '') return;
 
+    let dueDate = null;
+    if (dueDateInput.value) {
+        dueDate = new Date(dueDateInput.value);
+    }
+
     todos.push({
         id: nextId++,
         text: text,
-        completed: false
+        completed: false,
+        dueDate: dueDate
     });
 
     saveToLocalStorage(todos, nextId);
     input.value = '';
+    dueDateInput.value = '';
     renderTodos();
 }
 
@@ -78,18 +94,34 @@ function deleteTodo(id) {
 // Feature 1: Render todos
 function renderTodos() {
     const todoList = document.getElementById('todoList');
-    const filteredTodos = getFilteredTodos();
+    let displayTodos = getFilteredTodos();
+
+    if (sortByDueDate) {
+        displayTodos = sortTodosByDueDate(displayTodos);
+    }
 
     todoList.innerHTML = '';
 
-    filteredTodos.forEach(todo => {
+    displayTodos.forEach(todo => {
         const li = document.createElement('li');
         li.className = 'todo-item';
         if (todo.completed) li.classList.add('completed');
+        if (todo.dueDate && isPast(todo.dueDate) && !todo.completed) {
+            li.classList.add('overdue');
+        }
+
+        let dueDateHtml = '';
+        if (todo.dueDate) {
+            const dueDateObj = new Date(todo.dueDate);
+            const formatted = format(dueDateObj, 'MMM d, yyyy');
+            const relative = formatDistanceToNow(dueDateObj, { addSuffix: true });
+            dueDateHtml = `<span class="due-date" title="${formatted}">${relative}</span>`;
+        }
 
         li.innerHTML = `
             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}>
             <span class="todo-text">${escapeHtml(todo.text)}</span>
+            ${dueDateHtml}
             <button class="todo-delete">Delete</button>
         `;
 
@@ -123,6 +155,23 @@ function setFilter(filter) {
         }
     });
 
+    renderTodos();
+}
+
+// Feature 3: Sort todos by due date (upcoming first)
+function sortTodosByDueDate(todosToSort) {
+    const withDates = todosToSort.filter(t => t.dueDate).sort((a, b) => {
+        return compareAsc(new Date(a.dueDate), new Date(b.dueDate));
+    });
+    const withoutDates = todosToSort.filter(t => !t.dueDate);
+    return [...withDates, ...withoutDates];
+}
+
+// Feature 3: Toggle sort by due date
+function toggleSortByDueDate() {
+    sortByDueDate = !sortByDueDate;
+    const sortBtn = document.getElementById('sortByDueDate');
+    sortBtn.classList.toggle('active');
     renderTodos();
 }
 

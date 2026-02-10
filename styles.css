@@ -49,10 +49,19 @@ footer {
     display: flex;
     gap: var(--spacing);
     margin-bottom: 2rem;
+    flex-wrap: wrap;
 }
 
-.input-section input {
+.input-section input[type="text"] {
     flex: 1;
+    min-width: 200px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+
+.input-section input[type="date"] {
     padding: 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
@@ -114,6 +123,27 @@ footer {
     border-color: var(--color-primary);
 }
 
+.sort-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f3f4f6;
+    color: var(--color-text);
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sort-btn:hover {
+    background-color: #e5e7eb;
+}
+
+.sort-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
 /* Todo list (Feature 1) */
 .todoList {
     list-style: none;
@@ -155,6 +185,22 @@ footer {
 .todo-text {
     flex: 1;
     word-break: break-word;
+}
+
+/* Due date display (Feature 3) */
+.due-date {
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    color: #6366f1;
+    padding: 0.25rem 0.5rem;
+    background-color: #e0e7ff;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+}
+
+.todo-item.overdue .due-date {
+    color: #dc2626;
+    background-color: #fee2e2;
 }
 
 .todo-delete {
