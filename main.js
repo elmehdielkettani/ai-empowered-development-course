@@ -12,6 +12,9 @@ let currentFilter = 'all';
 // Sort mode (Feature 3)
 let sortByDueDate = false;
 
+// Search query (Feature 4)
+let searchQuery = '';
+
 document.addEventListener('DOMContentLoaded', () => {
     init();
     initVibeKanban();
@@ -41,6 +44,10 @@ function init() {
     // Wire up sort button
     const sortBtn = document.getElementById('sortByDueDate');
     sortBtn.addEventListener('click', toggleSortByDueDate);
+
+    // Wire up search input
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', updateSearch);
 
     renderTodos();
 }
@@ -132,14 +139,24 @@ function renderTodos() {
     });
 }
 
-// Feature 2: Filter todos based on current filter
+// Feature 2: Filter todos based on current filter and search query
 function getFilteredTodos() {
+    let filtered;
     if (currentFilter === 'active') {
-        return todos.filter(t => !t.completed);
+        filtered = todos.filter(t => !t.completed);
     } else if (currentFilter === 'completed') {
-        return todos.filter(t => t.completed);
+        filtered = todos.filter(t => t.completed);
+    } else {
+        filtered = todos; // 'all'
     }
-    return todos; // 'all'
+
+    // Apply text search filter
+    if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        filtered = filtered.filter(t => t.text.toLowerCase().includes(query));
+    }
+
+    return filtered;
 }
 
 // Feature 2: Set filter and update UI
@@ -155,6 +172,13 @@ function setFilter(filter) {
         }
     });
 
+    renderTodos();
+}
+
+// Feature 4: Update search query and re-render
+function updateSearch() {
+    const searchInput = document.getElementById('searchInput');
+    searchQuery = searchInput.value;
     renderTodos();
 }
 

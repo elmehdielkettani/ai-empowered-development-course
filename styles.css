@@ -5,10 +5,74 @@
 }
 
 :root {
+    /* Primary colors */
     --color-primary: #3b82f6;
+    --color-primary-hover: #2563eb;
+    --color-primary-active: #1d4ed8;
+
+    /* Background colors */
     --color-background: #ffffff;
+    --color-secondary-bg: #f9fafb;
+    --color-tertiary-bg: #f3f4f6;
+
+    /* Text colors */
     --color-text: #1f2937;
+    --color-text-muted: #6b7280;
+    --color-text-light: #9ca3af;
+
+    /* Border colors */
+    --color-border: #e5e7eb;
+    --color-border-light: #d1d5db;
+
+    /* Accent colors */
+    --color-accent-blue: #6366f1;
+    --color-accent-blue-bg: #e0e7ff;
+    --color-accent-red: #dc2626;
+    --color-accent-red-bg: #fee2e2;
+    --color-accent-red-dark: #b91c1c;
+    --color-error: #ef4444;
+    --color-error-hover: #dc2626;
+    --color-error-active: #b91c1c;
+
+    /* Focus styles */
+    --color-focus-shadow: rgba(59, 130, 246, 0.1);
+
+    /* Spacing */
     --spacing: 1rem;
+}
+
+[data-theme="dark"] {
+    /* Primary colors */
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+    --color-primary-active: #2563eb;
+
+    /* Background colors */
+    --color-background: #111827;
+    --color-secondary-bg: #1f2937;
+    --color-tertiary-bg: #374151;
+
+    /* Text colors */
+    --color-text: #f3f4f6;
+    --color-text-muted: #d1d5db;
+    --color-text-light: #9ca3af;
+
+    /* Border colors */
+    --color-border: #374151;
+    --color-border-light: #4b5563;
+
+    /* Accent colors */
+    --color-accent-blue: #93c5fd;
+    --color-accent-blue-bg: #1e3a8a;
+    --color-accent-red: #ef5350;
+    --color-accent-red-bg: #7f1d1d;
+    --color-accent-red-dark: #991b1b;
+    --color-error: #f87171;
+    --color-error-hover: #ef5350;
+    --color-error-active: #c53030;
+
+    /* Focus styles */
+    --color-focus-shadow: rgba(96, 165, 250, 0.2);
 }
 
 body {
@@ -19,11 +83,15 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
     padding: var(--spacing);
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 main {
@@ -33,10 +101,10 @@ main {
 
 footer {
     padding: var(--spacing);
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--color-border);
     text-align: center;
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--color-text-muted);
 }
 
 .container {
@@ -56,22 +124,28 @@ footer {
     flex: 1;
     min-width: 200px;
     padding: 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--color-border-light);
     border-radius: 0.375rem;
     font-size: 1rem;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .input-section input[type="date"] {
     padding: 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--color-border-light);
     border-radius: 0.375rem;
     font-size: 1rem;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .input-section input:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px var(--color-focus-shadow);
 }
 
 .input-section button {
@@ -87,11 +161,11 @@ footer {
 }
 
 .input-section button:hover {
-    background-color: #2563eb;
+    background-color: var(--color-primary-hover);
 }
 
 .input-section button:active {
-    background-color: #1d4ed8;
+    background-color: var(--color-primary-active);
 }
 
 /* Filter buttons (Feature 2) */
@@ -104,9 +178,9 @@ footer {
 
 .filter-btn {
     padding: 0.5rem 1rem;
-    background-color: #f3f4f6;
+    background-color: var(--color-tertiary-bg);
     color: var(--color-text);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     border-radius: 0.375rem;
     font-weight: 500;
     cursor: pointer;
@@ -114,7 +188,7 @@ footer {
 }
 
 .filter-btn:hover {
-    background-color: #e5e7eb;
+    background-color: var(--color-border);
 }
 
 .filter-btn.active {
@@ -125,9 +199,9 @@ footer {
 
 .sort-btn {
     padding: 0.5rem 1rem;
-    background-color: #f3f4f6;
+    background-color: var(--color-tertiary-bg);
     color: var(--color-text);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     border-radius: 0.375rem;
     font-weight: 500;
     cursor: pointer;
@@ -135,13 +209,32 @@ footer {
 }
 
 .sort-btn:hover {
-    background-color: #e5e7eb;
+    background-color: var(--color-border);
 }
 
 .sort-btn.active {
     background-color: var(--color-primary);
     color: white;
     border-color: var(--color-primary);
+}
+
+/* Search input (Feature 4) */
+.search-input {
+    flex: 1;
+    min-width: 150px;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border-light);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-shadow);
 }
 
 /* Todo list (Feature 1) */
@@ -154,15 +247,15 @@ footer {
     align-items: center;
     gap: 0.75rem;
     padding: 1rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     border-radius: 0.375rem;
     margin-bottom: 0.5rem;
-    background-color: #f9fafb;
+    background-color: var(--color-secondary-bg);
     transition: background-color 0.2s;
 }
 
 .todo-item:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-tertiary-bg);
 }
 
 .todo-item.completed {
@@ -171,7 +264,7 @@ footer {
 
 .todo-item.completed .todo-text {
     text-decoration: line-through;
-    color: #9ca3af;
+    color: var(--color-text-light);
 }
 
 .todo-checkbox {
@@ -191,22 +284,23 @@ footer {
 .due-date {
     flex-shrink: 0;
     font-size: 0.875rem;
-    color: #6366f1;
+    color: var(--color-accent-blue);
     padding: 0.25rem 0.5rem;
-    background-color: #e0e7ff;
+    background-color: var(--color-accent-blue-bg);
     border-radius: 0.25rem;
     white-space: nowrap;
+    transition: color 0.2s, background-color 0.2s;
 }
 
 .todo-item.overdue .due-date {
-    color: #dc2626;
-    background-color: #fee2e2;
+    color: var(--color-accent-red);
+    background-color: var(--color-accent-red-bg);
 }
 
 .todo-delete {
     flex-shrink: 0;
     padding: 0.5rem 0.75rem;
-    background-color: #ef4444;
+    background-color: var(--color-error);
     color: white;
     border: none;
     border-radius: 0.375rem;
@@ -217,9 +311,32 @@ footer {
 }
 
 .todo-delete:hover {
-    background-color: #dc2626;
+    background-color: var(--color-error-hover);
 }
 
 .todo-delete:active {
-    background-color: #b91c1c;
+    background-color: var(--color-error-active);
+}
+
+/* Dark mode toggle button */
+.dark-mode-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+    color: var(--color-text);
+}
+
+.dark-mode-btn:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+.dark-mode-btn:active {
+    transform: scale(0.95);
 }
