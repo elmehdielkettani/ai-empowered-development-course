@@ -340,3 +340,54 @@ footer {
 .dark-mode-btn:active {
     transform: scale(0.95);
 }
+
+/* Bulk operations (Feature 5) */
+.bulk-operations {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.bulk-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-tertiary-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+}
+
+.bulk-btn:hover {
+    background-color: var(--color-border);
+}
+
+.bulk-btn:active {
+    opacity: 0.8;
+}
+
+.bulk-btn.danger {
+    background-color: var(--color-accent-red-bg);
+    color: var(--color-accent-red);
+    border-color: var(--color-accent-red-bg);
+}
+
+.bulk-btn.danger:hover {
+    background-color: var(--color-accent-red);
+    color: white;
+}
+
+.bulk-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--color-tertiary-bg);
+    color: var(--color-text-muted);
+}
+
+.bulk-btn.danger:disabled {
+    background-color: var(--color-accent-red-bg);
+    color: var(--color-text-muted);
+}

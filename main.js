@@ -53,6 +53,12 @@ function init() {
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', updateSearch);
 
+    // Wire up bulk operation buttons
+    const markAllBtn = document.getElementById('markAllCompleteBtn');
+    markAllBtn.addEventListener('click', markAllComplete);
+    const deleteCompletedBtn = document.getElementById('deleteCompletedBtn');
+    deleteCompletedBtn.addEventListener('click', deleteCompleted);
+
     renderTodos();
 }
 
@@ -141,6 +147,8 @@ function renderTodos() {
 
         todoList.appendChild(li);
     });
+
+    updateBulkButtonStates();
 }
 
 // Feature 2: Filter todos based on current filter and search query
@@ -244,4 +252,39 @@ function toggleDarkMode() {
     darkMode = !darkMode;
     applyTheme();
     localStorage.setItem('todoAppTheme', darkMode ? 'dark' : 'light');
+}
+
+// Feature 6: Bulk operations
+function markAllComplete() {
+    const filtered = getFilteredTodos();
+    filtered.forEach(todo => {
+        todo.completed = true;
+    });
+    saveToLocalStorage(todos, nextId);
+    renderTodos();
+}
+
+function deleteCompleted() {
+    if (!confirm('Delete all completed todos? This cannot be undone.')) {
+        return;
+    }
+    const filtered = getFilteredTodos();
+    const completedIds = new Set(filtered.filter(t => t.completed).map(t => t.id));
+    todos = todos.filter(t => !completedIds.has(t.id));
+    saveToLocalStorage(todos, nextId);
+    renderTodos();
+}
+
+function updateBulkButtonStates() {
+    const markAllBtn = document.getElementById('markAllCompleteBtn');
+    const deleteCompletedBtn = document.getElementById('deleteCompletedBtn');
+    const filtered = getFilteredTodos();
+
+    // Disable mark all if no incomplete todos in filtered view
+    const hasIncomplete = filtered.some(t => !t.completed);
+    markAllBtn.disabled = !hasIncomplete;
+
+    // Disable delete if no completed todos in filtered view
+    const hasCompleted = filtered.some(t => t.completed);
+    deleteCompletedBtn.disabled = !hasCompleted;
 }
