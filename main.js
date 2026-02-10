@@ -15,7 +15,11 @@ let sortByDueDate = false;
 // Search query (Feature 4)
 let searchQuery = '';
 
+// Dark mode (Feature 5)
+let darkMode = false;
+
 document.addEventListener('DOMContentLoaded', () => {
+    initializeDarkMode();
     init();
     initVibeKanban();
 });
@@ -204,4 +208,40 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Feature 5: Dark mode theme toggle
+function loadDarkModePreference() {
+    const stored = localStorage.getItem('todoAppTheme');
+    if (stored !== null) {
+        return stored === 'dark';
+    }
+    // Check system preference if no localStorage value
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDark;
+}
+
+function initializeDarkMode() {
+    darkMode = loadDarkModePreference();
+    applyTheme();
+
+    // Wire up dark mode toggle button
+    const toggleBtn = document.getElementById('darkModeToggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', toggleDarkMode);
+    }
+}
+
+function applyTheme() {
+    if (darkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+}
+
+function toggleDarkMode() {
+    darkMode = !darkMode;
+    applyTheme();
+    localStorage.setItem('todoAppTheme', darkMode ? 'dark' : 'light');
 }
