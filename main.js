@@ -34,6 +34,15 @@ function init() {
         btn.addEventListener('click', () => setFilter(btn.dataset.filter));
     });
 
+    // Wire up bulk action buttons
+    const bulkSelectAllBtn = document.querySelector('.bulk-select-all');
+    const bulkDeleteCompletedBtn = document.querySelector('.bulk-delete-completed');
+    const bulkMarkCompleteBtn = document.querySelector('.bulk-mark-complete');
+
+    if (bulkSelectAllBtn) bulkSelectAllBtn.addEventListener('click', selectAllTodos);
+    if (bulkDeleteCompletedBtn) bulkDeleteCompletedBtn.addEventListener('click', deleteCompletedTodos);
+    if (bulkMarkCompleteBtn) bulkMarkCompleteBtn.addEventListener('click', markAllComplete);
+
     renderTodos();
 }
 
@@ -123,6 +132,32 @@ function setFilter(filter) {
         }
     });
 
+    renderTodos();
+}
+
+// Feature 3: Bulk operations
+function selectAllTodos() {
+    const filtered = getFilteredTodos();
+    filtered.forEach(todo => {
+        todo.completed = true;
+    });
+    saveToLocalStorage(todos, nextId);
+    renderTodos();
+}
+
+function deleteCompletedTodos() {
+    if (!confirm('Delete all completed todos?')) return;
+    todos = todos.filter(t => !t.completed);
+    saveToLocalStorage(todos, nextId);
+    renderTodos();
+}
+
+function markAllComplete() {
+    const filtered = getFilteredTodos();
+    filtered.forEach(todo => {
+        todo.completed = true;
+    });
+    saveToLocalStorage(todos, nextId);
     renderTodos();
 }
 
